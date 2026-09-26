@@ -1,0 +1,4 @@
+{
+  "ApiBaseUrl": "https://test-api.example.com",
+  "UiBaseUrl": "https://test.example.com"
+}
