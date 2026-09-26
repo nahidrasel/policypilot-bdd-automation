@@ -11,10 +11,10 @@ public class QuoteService
     public async Task<IAPIResponse> CreateQuoteAsync(QuoteRequest request)
     {
         return await _api.PostAsync(
-            "/api/quotes",
-            new()
-            {
-                DataObject = request
-            });
+        "/api/quotes",
+        new APIRequestContextOptions
+        {
+            DataObject = request
+        });
     }
 }
