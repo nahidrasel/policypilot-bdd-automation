@@ -1,4 +1,4 @@
-public sealed class QuoteApiFixture : IAsyncLifetime
+public sealed class ApiFixture : IAsyncLifetime
 {
     private readonly PlaywrightApiClient _apiClient = new();
 
@@ -14,4 +14,9 @@ public sealed class QuoteApiFixture : IAsyncLifetime
     {
         await _apiClient.DisposeAsync();
     }
+}
+
+[CollectionDefinition("API Collection")]
+public sealed class ApiCollection : ICollectionFixture<ApiFixture>
+{
 }

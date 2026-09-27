@@ -11,6 +11,7 @@ public sealed class ApiHooks
 
         container.RegisterInstanceAs(apiClient);
         container.RegisterInstanceAs(new QuoteService(apiClient.Context));
+        container.RegisterInstanceAs(new QuoteScenarioContext());
     }
 
     [AfterScenario]
