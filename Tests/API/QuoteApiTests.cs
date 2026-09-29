@@ -1,8 +1,9 @@
-public class QuoteApiTests : IClassFixture<QuoteApiFixture>
+[Collection("API Collection")]
+public class QuoteApiTests
 {
     private readonly QuoteService _quoteService;
 
-    public QuoteApiTests(QuoteApiFixture fixture)
+    public QuoteApiTests(ApiFixture fixture)
     {
         _quoteService = fixture.QuoteService;
     }
