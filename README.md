@@ -10,6 +10,24 @@ A .NET 10 test automation sample for insurance quote APIs, using C#, Playwright 
 
 Browser-based UI automation is not implemented yet. `UiBaseUrl` is reserved for that work.
 
+## Tracing Test Data
+
+If a value is not shown in a feature or table, trace how the request is built before concluding that the value is missing. Follow the object through the step definition, test-data helper, any nested helper or factory, and the service call. Check what the final request contains immediately before it is sent.
+
+In this project, quote data flows from the feature to `QuoteSteps`, then from `QuoteTestData` into a `QuoteRequest`, which `QuoteService` sends to the API. When investigating a field such as a country code, check each point in that chain for a default or later assignment.
+
+## Step Definition Patterns
+
+Reqnroll step bindings can use regular expressions or Cucumber Expressions. For example, both styles can capture a quoted policy status:
+
+```csharp
+[When(@"Policy Status ""(.*)""")]
+```
+
+```csharp
+[When("Policy Status {string}")]
+```
+
 ## Prerequisites
 
 - .NET 10 SDK
