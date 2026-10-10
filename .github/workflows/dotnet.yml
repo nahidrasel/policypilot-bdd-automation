@@ -36,7 +36,7 @@ jobs:
           fail-on-error: true
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dotnet-test-results
           path: "**/TestResults/test-results.trx"
