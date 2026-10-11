@@ -9,9 +9,16 @@ public static class ConfigLoader
         var settings = config.Get<TestSettings>()
             ?? throw new InvalidOperationException("Could not load test settings.");
 
+        var apiBaseUrl = Environment.GetEnvironmentVariable("API_BASE_URL");
+        if (!string.IsNullOrWhiteSpace(apiBaseUrl))
+        {
+            settings.ApiBaseUrl = apiBaseUrl;
+        }
+
         if (string.IsNullOrWhiteSpace(settings.ApiBaseUrl))
         {
-            throw new InvalidOperationException("ApiBaseUrl is required in Config/appsetting.json.");
+            throw new InvalidOperationException(
+                "ApiBaseUrl is required in Config/appsetting.json or the API_BASE_URL environment variable.");
         }
 
         if (string.IsNullOrWhiteSpace(settings.UiBaseUrl))

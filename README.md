@@ -35,7 +35,7 @@ Reqnroll step bindings can use regular expressions or Cucumber Expressions. For 
 
 ## Configuration
 
-Set the API host in `Config/appsetting.json`. The service posts to `/api/v1/quotes` relative to `ApiBaseUrl`.
+By default, tests use a local HTTP test server, so they do not depend on a remote API or shared test data. Set the `API_BASE_URL` environment variable to opt in to testing against an external API; when it is not set, the local test server is used. The service posts to `/api/v1/quotes` relative to `ApiBaseUrl`.
 
 The MockAPI `quotes` resource is expected to provide these fields:
 
@@ -48,7 +48,7 @@ The MockAPI `quotes` resource is expected to provide these fields:
 | `coverType` | String |
 | `premium` | Number greater than zero |
 
-Use your own MockAPI host if you do not want tests writing to the configured shared resource.
+The configured MockAPI host is available for manual use by setting `API_BASE_URL`. Tests never write to it by default.
 
 ## Run Tests
 
@@ -66,8 +66,10 @@ dotnet test --filter FullyQualifiedName~QuoteApiTests
 dotnet test --filter FullyQualifiedName~QuoteAPIFeature
 ```
 
-The tests create quote records in MockAPI on each run. The generic MockAPI resource does not enforce insurance validation; the invalid-registration scenario documents that it accepts the request.
+The local test server returns deterministic quote responses and accepts deletion of quotes created during tests.
 
 ## Continuous Integration
 
-`.github/workflows/dotnet.yml` runs the full test suite on pushes, pull requests, and manual dispatch. It targets Ubuntu 24.04 and .NET 10, writes a TRX report, and publishes the results to GitHub with `dorny/test-reporter`.
+`.github/workflows/dotnet.yml` runs the full test suite on pushes and pull requests, and supports manual dispatch with a GitHub Environment and an optional `dotnet test --filter` expression. CI uses the local test server by default. To test against an external API, set its `API_BASE_URL` variable in the selected GitHub Environment; add separate environments for separate API targets. The workflow targets Ubuntu 24.04 and .NET 10, writes a TRX report, and publishes results with `dorny/test-reporter`.
+
+For example, use `FullyQualifiedName~QuoteApiTests` to run only the API test class, or `FullyQualifiedName~QuoteAPIFeature` to run only the Reqnroll feature tests.
