@@ -7,31 +7,38 @@ on:
 
 permissions:
   contents: read
-  actions: read
-  checks: write
 
 jobs:
   test:
     name: Build and test
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions:
+      contents: read
+      checks: write
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v7.0.1
-
+        uses: actions/checkout@v7
       - name: Set up .NET
-        uses: actions/setup-dotnet@v6.0.0
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
-
       - name: Run tests
         run: dotnet test --configuration Release --logger "trx;LogFileName=test-results.trx"
-
       - name: Publish test report
-        uses: dorny/test-reporter@v3
         if: ${{ !cancelled() }}
+        uses: dorny/test-reporter@v3
         with:
           name: .NET test results
           path: "**/TestResults/test-results.trx"
           reporter: dotnet-trx
+          fail-on-error: true
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: dotnet-test-results
+          path: "**/TestResults/test-results.trx"
+          if-no-files-found: warn
+          retention-days: 14
