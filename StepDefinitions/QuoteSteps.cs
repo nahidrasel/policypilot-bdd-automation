@@ -30,9 +30,12 @@ public class QuoteSteps
         _scenarioContext.Response =
             await _quoteService.CreateQuoteAsync(_scenarioContext.Request);
 
-        _scenarioContext.Quote =
-            await JsonHelper.DeserializeAsync<QuoteResponse>(_scenarioContext.Response)
-            ?? throw new InvalidOperationException("Quote response was empty.");
+        if (_scenarioContext.Response.Status == 201)
+        {
+            _scenarioContext.Quote =
+                await JsonHelper.DeserializeAsync<QuoteResponse>(_scenarioContext.Response)
+                ?? throw new InvalidOperationException("Quote response was empty.");
+        }
     }
 
     [Then("the API should return 201")]
