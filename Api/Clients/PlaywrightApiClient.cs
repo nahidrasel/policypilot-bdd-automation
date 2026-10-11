@@ -6,7 +6,7 @@ public class PlaywrightApiClient
     public IAPIRequestContext Context =>
         _apiContext ?? throw new InvalidOperationException("API client is not initialized.");
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(string? apiBaseUrl = null)
     {
         var settings = ConfigLoader.Load();
         var playwright = await Microsoft.Playwright.Playwright.CreateAsync();
@@ -14,7 +14,7 @@ public class PlaywrightApiClient
         _apiContext = await playwright.APIRequest.NewContextAsync(
             new APIRequestNewContextOptions
             {
-                BaseURL  = settings.ApiBaseUrl
+                BaseURL = apiBaseUrl ?? settings.ApiBaseUrl
             });
     }
     public async Task DisposeAsync()
